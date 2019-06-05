@@ -3,7 +3,8 @@ spring:
     host: localhost
     port: 6379
     timeout: 3600ms
-    database: 0
+    database: 4
+    #password: caonima250
     lettuce:
       pool:
         min-idle: 0

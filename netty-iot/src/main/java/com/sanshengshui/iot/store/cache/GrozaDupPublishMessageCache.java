@@ -30,7 +30,8 @@ public class GrozaDupPublishMessageCache {
         Map<Object,Object> map1 = redisCacheTemplate.opsForHash().entries(CACHE_PRE + clientId);
         if (map1 != null && !map1.isEmpty()) {
             map1.forEach((k, v) -> {
-                map.put((Integer)k, (DupPublishMessageStore)v);
+                System.out.println("k value = "+k.toString());
+                map.put(new Integer(k.toString()), (DupPublishMessageStore)v);
             });
         }
         return map;

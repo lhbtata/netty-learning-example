@@ -4,6 +4,9 @@ FROM java:8
 VOLUME /tmp
 # 拷贝文件到容器
 ADD netty-iot-0.0.1-SNAPSHOT.jar app.jar
+#设置时区
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
 #声明需要暴露的端口
 EXPOSE 8080
 EXPOSE 1883

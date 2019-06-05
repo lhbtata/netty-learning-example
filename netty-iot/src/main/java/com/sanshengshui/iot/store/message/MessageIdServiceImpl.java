@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class MessageIdServiceImpl implements GrozaMessageIdService {
     @Override
     public int getNextMessageId() {
-        return 0;
+        return 1;
     }
 }

@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * @author james
  * @date 2018年10月21日 10:31
+ * 客户端登录
  */
 @Slf4j
 public class Connect {

@@ -11,6 +11,8 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.mqtt.*;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class Subscribe {
     }
 
     public void processSubscribe(Channel channel, MqttSubscribeMessage msg) {
+        //System.out.println("subscibe===="+msg.variableHeader());
         List<MqttTopicSubscription> topicSubscriptions = msg.payload().topicSubscriptions();
         if (this.validTopicFilter(topicSubscriptions)) {
             String clientId = (String) channel.attr(AttributeKey.valueOf("clientId")).get();
