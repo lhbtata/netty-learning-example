@@ -50,7 +50,7 @@ public class Publish {
 
     public void processPublish(Channel channel, MqttPublishMessage msg) {
         String clientId = (String) channel.attr(AttributeKey.valueOf("clientId")).get();
-        System.out.println("publish....");
+        System.out.println("publish...."+msg.variableHeader().topicName());
         // QoS=0
         if (msg.fixedHeader().qosLevel() == MqttQoS.AT_MOST_ONCE) {
             byte[] messageBytes = new byte[msg.payload().readableBytes()];
@@ -67,8 +67,10 @@ public class Publish {
         }
         // QoS=1
         else if (msg.fixedHeader().qosLevel() == MqttQoS.AT_LEAST_ONCE) {
+            System.out.println("qos=1====================="+msg.variableHeader().topicName()+"==========="
+            +msg.toString());
             byte[] messageBytes = new byte[msg.payload().readableBytes()];
-            if(msg.variableHeader().topicName().equals("user/heartbeat")){
+            /*if(msg.variableHeader().topicName().equals("user/heartbeat")){
                 //处理连接心跳包
                 if (channel.pipeline().names().contains("idle")){
                     channel.pipeline().remove("idle");
@@ -76,7 +78,7 @@ public class Publish {
                 channel.pipeline().addFirst("idle",new IdleStateHandler(0, 0, Math.round(30* 1.5f)));
             }
             System.out.println(ConvertCode.bytes2Str(messageBytes));
-            System.out.println(msg.fixedHeader().isRetain());
+            System.out.println(msg.fixedHeader().isRetain());*/
             msg.payload().getBytes(msg.payload().readerIndex(), messageBytes);
             InternalMessage internalMessage = new InternalMessage()
                     .setTopic(msg.variableHeader().topicName())
