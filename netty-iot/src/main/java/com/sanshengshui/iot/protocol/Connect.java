@@ -122,7 +122,7 @@ public class Connect {
             if (channel.pipeline().names().contains("idle")){
                 channel.pipeline().remove("idle");
             }
-            channel.pipeline().addFirst("idle",new IdleStateHandler(0, 0, Math.round(msg.variableHeader().keepAliveTimeSeconds() * 1.5f)));
+            channel.pipeline().addFirst("idle",new IdleStateHandler(0, 0, 180));//Math.round(msg.variableHeader().keepAliveTimeSeconds() * 1.5f)
         }
         //至此存储会话消息及返回接受客户端连接
         grozaSessionStoreService.put(msg.payload().clientIdentifier(),sessionStore);

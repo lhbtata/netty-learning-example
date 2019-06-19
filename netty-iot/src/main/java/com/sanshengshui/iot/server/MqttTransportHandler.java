@@ -118,16 +118,21 @@ public class MqttTransportHandler extends SimpleChannelInboundHandler<MqttMessag
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
             if (idleStateEvent.state() == IdleState.ALL_IDLE) {
-                Channel channel = ctx.channel();
-                String clientId = (String) channel.attr(AttributeKey.valueOf("clientId")).get();
-                // 发送遗嘱消息
-                if (this.protocolProcess.getGrozaSessionStoreService().containsKey(clientId)) {
-                    SessionStore sessionStore = this.protocolProcess.getGrozaSessionStoreService().get(clientId);
-                    if (sessionStore.getWillMessage() != null) {
-                        this.protocolProcess.publish().processPublish(ctx.channel(), sessionStore.getWillMessage());
+                try{
+                    Channel channel = ctx.channel();
+                    String clientId = (String) channel.attr(AttributeKey.valueOf("clientId")).get();
+                    // 发送遗嘱消息
+                    if (this.protocolProcess.getGrozaSessionStoreService().containsKey(clientId)) {
+                        SessionStore sessionStore = this.protocolProcess.getGrozaSessionStoreService().get(clientId);
+                        if (sessionStore.getWillMessage() != null) {
+                            this.protocolProcess.publish().processPublish(ctx.channel(), sessionStore.getWillMessage());
+                        }
                     }
+                }finally {
+                    System.out.println("连接超时！断开连接");
+                    ctx.close();
                 }
-                ctx.close();
+
             }
         } else {
             super.userEventTriggered(ctx, evt);

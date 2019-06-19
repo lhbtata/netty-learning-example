@@ -95,7 +95,7 @@ public class Publish {
         else if (msg.fixedHeader().qosLevel() == MqttQoS.EXACTLY_ONCE) {
             byte[] messageBytes = new byte[msg.payload().readableBytes()];
 
-            System.out.println(ConvertCode.bytes2Str(messageBytes));
+            System.out.println("消息大小："+messageBytes.length);
             //messageBytes = setMsn(messageBytes);
             msg.payload().getBytes(msg.payload().readerIndex(), messageBytes);
             InternalMessage internalMessage = new InternalMessage()
