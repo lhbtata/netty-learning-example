@@ -124,7 +124,7 @@ public class MqttTransportHandler extends SimpleChannelInboundHandler<MqttMessag
                     // 发送遗嘱消息
                     if (this.protocolProcess.getGrozaSessionStoreService().containsKey(clientId)) {
                         SessionStore sessionStore = this.protocolProcess.getGrozaSessionStoreService().get(clientId);
-                        if (sessionStore.getWillMessage() != null) {
+                        if (sessionStore.getWillMessage() != null && sessionStore.getWillMessage().variableHeader().packetId()>0) {
                             this.protocolProcess.publish().processPublish(ctx.channel(), sessionStore.getWillMessage());
                         }
                     }
