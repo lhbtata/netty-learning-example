@@ -67,18 +67,7 @@ public class Publish {
         }
         // QoS=1
         else if (msg.fixedHeader().qosLevel() == MqttQoS.AT_LEAST_ONCE) {
-            System.out.println("qos=1====================="+msg.variableHeader().topicName()+"==========="
-            +msg.toString());
             byte[] messageBytes = new byte[msg.payload().readableBytes()];
-            /*if(msg.variableHeader().topicName().equals("user/heartbeat")){
-                //处理连接心跳包
-                if (channel.pipeline().names().contains("idle")){
-                    channel.pipeline().remove("idle");
-                }
-                channel.pipeline().addFirst("idle",new IdleStateHandler(0, 0, Math.round(30* 1.5f)));
-            }
-            System.out.println(ConvertCode.bytes2Str(messageBytes));
-            System.out.println(msg.fixedHeader().isRetain());*/
             msg.payload().getBytes(msg.payload().readerIndex(), messageBytes);
             InternalMessage internalMessage = new InternalMessage()
                     .setTopic(msg.variableHeader().topicName())
@@ -147,7 +136,7 @@ public class Publish {
             if (grozaSessionStoreService.containsKey(subscribeStore.getClientId())) {
                 // 订阅者收到MQTT消息的QoS级别, 最终取决于发布消息的QoS和主题订阅的QoS
                 MqttQoS respQoS = mqttQoS.value() > subscribeStore.getMqttQoS() ? MqttQoS.valueOf(subscribeStore.getMqttQoS()) : mqttQoS;
-                if (respQoS == MqttQoS.AT_MOST_ONCE || respQoS == MqttQoS.AT_LEAST_ONCE) {
+                if (respQoS == MqttQoS.AT_MOST_ONCE) {
                     MqttPublishMessage publishMessage = (MqttPublishMessage) MqttMessageFactory.newMessage(
                             new MqttFixedHeader(MqttMessageType.PUBLISH, dup, respQoS, retain, 0),
                             new MqttPublishVariableHeader(topic, 0),
@@ -155,7 +144,7 @@ public class Publish {
                     log.info("PUBLISH - clientId: {}, topic: {}, Qos: {}", subscribeStore.getClientId(), topic, respQoS.value());
                     grozaSessionStoreService.get(subscribeStore.getClientId()).getChannel().writeAndFlush(publishMessage);
                 }
-                /*if (respQoS == MqttQoS.AT_LEAST_ONCE) {
+                if (respQoS == MqttQoS.AT_LEAST_ONCE) {
                     int messageId = grozaMessageIdService.getNextMessageId();
                     MqttPublishMessage publishMessage = (MqttPublishMessage) MqttMessageFactory.newMessage(
                             new MqttFixedHeader(MqttMessageType.PUBLISH, dup, respQoS, retain, 0),
@@ -165,7 +154,7 @@ public class Publish {
                             .setTopic(topic).setMqttQoS(respQoS.value()).setMessageBytes(messageBytes).setMessageId(messageId);
                     grozaDupPublishMessageStoreService.put(subscribeStore.getClientId(), dupPublishMessageStore);
                     grozaSessionStoreService.get(subscribeStore.getClientId()).getChannel().writeAndFlush(publishMessage);
-                }*/
+                }
                 if (respQoS == MqttQoS.EXACTLY_ONCE) {
                     int messageId = grozaMessageIdService.getNextMessageId();
                     MqttPublishMessage publishMessage = (MqttPublishMessage) MqttMessageFactory.newMessage(
