@@ -133,6 +133,7 @@ public class Publish {
             System.out.println(subscribeStore.getClientId());
             System.out.println(subscribeStore.getMqttQoS());
             System.out.println(subscribeStore.getTopicFilter());
+            System.out.println(new String(messageBytes));
             if (grozaSessionStoreService.containsKey(subscribeStore.getClientId())) {
                 // 订阅者收到MQTT消息的QoS级别, 最终取决于发布消息的QoS和主题订阅的QoS
                 MqttQoS respQoS = mqttQoS.value() > subscribeStore.getMqttQoS() ? MqttQoS.valueOf(subscribeStore.getMqttQoS()) : mqttQoS;
